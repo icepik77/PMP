@@ -1,0 +1,323 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+/*font-family: 'Roboto', sans-serif;*/
+
+
+body{
+  font-family: 'Roboto', sans-serif;
+}
+.App {
+  text-align: center;
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.App-link {
+  color: #61dafb;
+}
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.header{
+  background-color: #005b7c;
+  width: 100%;
+  height: 63px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+.header__user{
+  margin-right: 35px;
+  color: white;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+.header__left-column{
+  display:  flex;
+  justify-content: start;
+  margin-top: 0.5%;
+  width: 50%;
+  color: white;
+  font-size: 20px;
+}
+.header__left-column div{
+  margin: 0 15px;
+  cursor: pointer;
+}
+.header__right-column{
+  display: flex;
+  width: 50%;
+  align-items: center;
+  justify-content: end;
+}
+
+.avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+}
+
+.authentication {
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  max-width: 22%;
+  margin: 10% auto;
+  background-color: #005b7c;
+  border-radius: 12px;
+  height: 300px;
+}
+.authentication input {
+  width: 340px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  border-radius: 9px;
+  border: none;
+  height: 40px;
+}
+.authentication button, .risks button, button {
+  border: none;
+  width: 200px;
+  height: 47px;
+  margin: 0 auto;
+  background-color: #01bcc6;
+  color: #efefee;
+  border-radius: 9px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+.authentication h1 {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  color: #efefee;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.create-project, .risks{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.create-project .authentication{
+  margin: 0 0;
+  height: 146px;
+}
+.create-project input{
+  margin-top: 4%;
+}
+.create-project ul{
+  list-style: none;
+  margin-top: 4%;
+  width: 38%;
+}
+.create-project li{
+  background-color: #005b7c;
+  width: 100%;
+  height: 23px;
+  border-radius: 12px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 17px 13px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.regulation{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.regulation__notice{
+  margin-top: 3%;
+  display: flex;
+  flex-direction: column;
+  padding-left: 2%;
+  width: 50%;
+  border: 3px solid #005b7c;
+  border-radius: 15px;
+}
+.regulation__unit {
+  width: 98%;
+  display: flex;
+  flex-direction: column;
+}
+.regulation table, .risks table, .participants table{
+  border-collapse: collapse;
+  border: 2px solid black;
+  margin-bottom: 20px;
+}
+.regulation td, .regulation th, .risks td, .risks th, .participants td, .participants th{
+  border: 2px solid black;
+  font-size: 18px;
+}
+.regulation th, .participants th, .risks th{
+  background: #005b7c;
+  color: white;
+  font-size: 21px;
+}
+.regulation textarea{
+  width: 43%;
+  height: 53px;
+  border: 0;
+  border-bottom: 1px solid #005b7c;
+}
+.regulation h1, .participants h1{
+  text-align: center;
+}
+.regulation h3 {
+  display: inline-block;
+}
+.regulation button{
+  margin-right: 25px;
+}
+
+.main-page{
+  display: flex;
+}
+.main-page__data{
+  width: 100%;
+  margin: 0 auto;
+}
+.main-page h1{
+  display: flex;
+  justify-content: center;
+}
+.main-page nav{
+  height: 1000px;
+  width: 20%;
+  background-color: #005b7c;
+  order: -1;
+}
+.main-page ul {
+  list-style: none;
+  padding-left: 0px;
+}
+.main-page li {
+  border-bottom: 2px solid gray;
+  height: 40px;
+  width: 100%;
+  padding-top: 5px;
+}
+.main-page ul li a {
+  color: #efefee;
+  text-decoration: none;
+  font-size: 24px;
+  margin-left: 20px;
+}
+
+.ISW__left-column{
+  width: 50%;
+}
+.ISW__left-column h3{
+  margin-left: 2%;
+}
+.ISW__right-column{
+  width: 50%;
+}
+.ISW__right-column h2{
+  margin-top: 0;
+  margin-left: 42%;
+}
+.ISW ul{
+  list-style: none;
+}
+.ISW h1, .create-project h1{
+  text-align: center;
+}
+.str{
+  display: flex;
+  width: 100%;
+}
+.ISW button{
+  border: none;
+  width: 200px;
+  height: 47px;
+  background-color: #01bcc6;
+  color: #efefee;
+  border-radius: 9px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 2%;
+  display: block;
+}
+.struct-work{
+  background-color: #F7F5EE;
+  width: 575px;
+  height: 40px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+.labor-input{
+  width: 25px;
+  outline: none;
+  border: none;
+  background-color: #F7F5EE;
+}
+.sumLabor{
+  width: 42px;
+  height: 33px;
+  border: none;
+  outline: none;
+  background-color: #F7F5EE;
+}
+.struct-work img {
+  width: 17px;
+  margin-right: 10px;
+  padding-top: 9px;
+}
+.input-string{
+  width: 400px;
+  height: 33px;
+  outline: none;
+  border: none;
+  background-color: #F7F5EE;
+}
+.btn-img{
+  cursor: pointer;
+}
+
+.cost__tasks{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.risks table, .participants table{
+  margin-top: 2%;
+}
+
+.participants__content{
+  margin-left: 2%;
+}
