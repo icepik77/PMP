@@ -17,13 +17,13 @@ function App() {
     <Routes>
       <Route path="/" element={<AuthenticationPage/>}/>
       <Route path="/registr" element={<RegistrPage/>}/>
-      <Route path="/HostPage" element={<HostPage/>}/>
+      <Route path="/HostPage/:id" element={<HostPage/>}/>
       <Route path="/isw" element={<ISW/>}/>
       <Route path ="/cost" element = {<Cost/>}/>
-      <Route path ="/createProject" element = {<CreateProject/>}/>
-      <Route path ="/regulation" element = {<Regulation/>}/>
+      <Route path ="/createProject/:id" element = {<CreateProject/>}/>
+      <Route path ="/regulation/:id" element = {<Regulation/>}/>
       <Route path ="/risks" element = {<Risks/>}/>
-      <Route path ="/participants" element = {<Participants/>}/>
+      <Route path ="/participants/:id" element = {<Participants/>}/>
     </Routes>
   );
 }

@@ -1,43 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Link} from "react-router-dom";
 import { useHttp } from "../hooks/useHttp";
 import {useNavigate} from "react-router-dom";
 import avatar from "./img/avatar.JPG";
+import trash from "./img/delete.png";
 
 export function CreateProject (){
 
     const {request, loading} = useHttp();
     const navigate = useNavigate();
+    let indexNewTitle = 0;
+    let user = localStorage.getItem("user");
 
     const [project, setProject] = useState([{name:"Недижимость"}, {name:"CRM"}, {name:"Серверная логика"}]);
 
     async function getData(){
-        try {
-            const data = await request("/createProject", "GET", null);
-            data = JSON.parse(data);
-            setProject(data);
-        } catch (e) {}
+        
+        const data = await request(`/createProject/${user}`, "GET");
+        setProject(data);
     }
 
-    const [form, setForm] = useState({
-        name:''
-    });
+    useEffect (() => {
+        getData();
+    }, [])
+    
+    async function addProject(){
 
-    const changeHandler = event =>{
-        setForm({...form, [event.target.name]:event.target.value});
-    };
+        let title = await prompt("Введите название проекта", `Новый проект ${indexNewTitle}`);
+        indexNewTitle++;
 
-    function addProject(){
-
-        const data = request("/createProject", "POST", {...form});
+        const data = request(`/createProject/${user}`, "POST", {title: title, id: user});
         data.then(
             PromiseResult=>{
-                if (PromiseResult.answer==="yes" && !loading){
-                    console.log("The project add sucessfuly");
-                }
+                setProject(PromiseResult);
             }
         );
     };
+
+    async function deleteProject(index){
+        let item = project[index];
+
+        const data = request(`/deleteProject/${user}`, "POST", {id:item._id});
+        data.then(
+            PromiseResult =>{
+                setProject(PromiseResult);
+            }
+        )
+    }
+
+    async function setIdProjectLocal(id){
+        await localStorage.setItem('project', id);
+    }
 
     return(
         <div className="create-project">
@@ -55,10 +68,11 @@ export function CreateProject (){
             <h1>Доступные проекты</h1>
         
             <ul>
-                {project.map((element, index) => 
-                    <li key={index}>
-                        {element.name}
-                    </li>)
+                {project ? project.map((element, index) => 
+                    <li key={index} onClick={()=>setIdProjectLocal(element._id)}>
+                        <Link to={`/HostPage/${element._id}`}>{element.name}</Link> 
+                        <img src={trash} className="create-project__trash" onClick={() => deleteProject(index)}/>
+                    </li>) : ''
                 }
             </ul>
             <button onClick={ () => addProject()}>Создать проект</button>

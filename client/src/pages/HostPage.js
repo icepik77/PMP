@@ -18,7 +18,7 @@ export const HostPage = () =>{
             <nav>
                 <ul>
                     <li>
-                        <Link to={"/regulation"}>Устав проекта </Link>  
+                        <Link to={`/regulation/${localStorage.getItem("project")}`}>Устав проекта </Link>  
                     </li>
                     <li>
                         <Link to={"/isw"}>ИСР</Link> 
@@ -30,7 +30,7 @@ export const HostPage = () =>{
                         <Link to={"/risks"}>Риски</Link>  
                     </li>
                     <li>
-                        <Link to={"/isw"}>Участники</Link>  
+                        <Link to={`/participants/${localStorage.getItem("project")}`}>Участники</Link>  
                     </li>
                     <li>
                         <Link to={"/isw"}>Отчет</Link>  

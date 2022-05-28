@@ -19,8 +19,11 @@ export const AuthenticationPage = function(){
         const data = request("/", "POST", {...form});
         data.then(
             PromiseResult=>{
-                if (PromiseResult.answer==="yes" && !loading){
-                    return navigate("/createProject");
+                localStorage.setItem('user', PromiseResult.userId);
+
+                console.log(localStorage);
+                if (!loading){
+                    return navigate(`/createProject/${PromiseResult.userId}`);
                 }
             }
         );

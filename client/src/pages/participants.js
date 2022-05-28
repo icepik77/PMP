@@ -1,6 +1,44 @@
+import React, { useEffect, useState } from "react";
+import {Link} from "react-router-dom";
+import { useHttp } from "../hooks/useHttp";
+import {useNavigate} from "react-router-dom";
 import avatar from "./img/avatar.JPG";
 
 export function Participants() {
+
+    const {request, loading} = useHttp();
+    const navigate = useNavigate();
+
+    const project = localStorage.getItem("project");
+
+    let [participants, setParticipants] = useState([{
+        name:"",
+        uninformed:"",
+        resisting:"",
+        neutral:"",
+        supporting: "",
+        leading: ""
+    }]);
+
+    async function getData(){
+        
+        const data = await request(`/participants/${project}`, "GET");
+        if (!data.length==0){
+            setParticipants(data);
+        }
+    }
+
+    useEffect (() => {
+        getData();
+    }, []);
+
+
+    function saveParticipants(){
+        const data = request(`/regulation/${project}`, "POST", {participants:participants});
+    }
+
+
+
     return(
         <div className="participants">
             <div className="header">
@@ -30,6 +68,15 @@ export function Participants() {
                         <th>Поддерживающий</th>
                         <th>Лидирующий</th>
                     </tr>
+                    {participants.map((element, index) => 
+                    <tr key={index}>
+                        <td>{element.name}</td>
+                        <td>{element.uninformed}</td>
+                        <td>{element.resisting}</td>
+                        <td>{element.neutral}</td>
+                        <td>{element.supporting}</td>
+                        <td>{element.leading}</td>
+                    </tr>)}
                     <tr>
                         <td>Виталий</td>
                         <td></td>

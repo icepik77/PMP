@@ -134,6 +134,10 @@ body{
 .create-project input{
   margin-top: 4%;
 }
+.create-project__trash{
+  width: 27px;
+  display: none;
+}
 .create-project ul{
   list-style: none;
   margin-top: 4%;
@@ -150,6 +154,17 @@ body{
   padding: 17px 13px;
   cursor: pointer;
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.create-project li:hover :last-child{
+  display: inline;
+}
+.create-project a{
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .regulation{
@@ -199,6 +214,10 @@ body{
 }
 .regulation button{
   margin-right: 25px;
+}
+.regulation table input{
+  height: 20px;
+  width: 97%;
 }
 
 .main-page{
