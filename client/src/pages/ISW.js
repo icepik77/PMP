@@ -1,21 +1,33 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
+import {Link} from "react-router-dom";
+import { useHttp } from "../hooks/useHttp";
+import {useNavigate} from "react-router-dom";
+
 import plus from "./img/plus.png";
 import note from "./img/note.png";
 import clock from "./img/clock.png";
 import cross from "./img/cross.png";
 import important from "./img/important.png";
 import avatar from "./img/avatar.JPG";
+import crossForm from "./img/crossForm.png";
 
 
 
 export function ISW() {
+
+    const {request, loading} = useHttp();
+    const navigate = useNavigate();
+    const project = localStorage.getItem("project");
 
     let [ISW, setISW] = useState({
         laborCommon:0,
         noteCommon:"",
         PackagesWork: []
     });
-
+    let noteForm = {
+        index: null,
+        text: ''
+    };
     let [arrayCriticalPath, setArrayCriticalPath] = useState([]);
 
     function setPackageWork(event) {
@@ -106,6 +118,26 @@ export function ISW() {
         setISW({laborCommon:sum, noteCommon:ISW.noteCommon, PackagesWork:ISW.PackagesWork});
     }
 
+    function saveWork(){
+    
+        const data = request(`/isw/${project}`, "POST", {ISW, arrayCriticalPath});
+    }
+
+    function showPackageWorks(){
+        //let note = await prompt("Введите информацию о ", `Новый проект ${indexNewTitle}`);
+    }
+
+    function closeNoteForm(){
+        let cross = document.querySelector(".note img");
+        cross.onClick = function(){
+
+        }
+    }
+
+    function setNote(){
+
+    }
+
     return(
         <div className="ISW">
             <div className="header">
@@ -125,6 +157,13 @@ export function ISW() {
                 </div>
             </div>
             <h1>Иерархическая структура работ</h1>
+            <div className="note">
+                <div>
+                    <h2>Заметки</h2>
+                    <img src={crossForm} onClick={() => closeNoteForm()}/>
+                </div>
+                <textarea value={''}></textarea>
+            </div>
             <div className="str">
                 <div className="ISW__left-column">
                     <button onClick={() => addPackageWork()}>Добавить пакет работ</button>

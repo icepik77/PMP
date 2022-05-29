@@ -21,8 +21,10 @@ export function Participants() {
     }]);
 
     async function getData(){
-        
+
         const data = await request(`/participants/${project}`, "GET");
+        console.log(data);
+        
         if (!data.length==0){
             setParticipants(data);
         }
@@ -34,9 +36,68 @@ export function Participants() {
 
 
     function saveParticipants(){
-        const data = request(`/regulation/${project}`, "POST", {participants:participants});
+        const data = request(`/participants/${project}`, "POST", {participants:participants});
     }
 
+    const changeHandlerName = event =>{
+
+        let copy = Object.assign([], participants);
+        copy[event.target.alt].name = event.target.value;
+        setParticipants(copy);
+       
+    }
+
+    const changeHandlerUninformed = event =>{
+
+        let copy = Object.assign([], participants);
+        copy[event.target.alt].uninformed = event.target.value;
+        setParticipants(copy);
+    }
+
+    const changeHandlerResisting = event =>{
+
+        let copy = Object.assign([], participants);
+        copy[event.target.alt].resisting = event.target.value;
+        setParticipants(copy);
+    }
+
+    const changeHandlerNeutral = event =>{
+
+        let copy = Object.assign([], participants);
+        copy[event.target.alt].neutral = event.target.value;
+        setParticipants(copy);
+    }
+
+    const changeHandlerSupporting = event =>{
+
+        let copy = Object.assign([], participants);
+        copy[event.target.alt].supporting = event.target.value;
+        setParticipants(copy);
+    }
+
+    const changeHandlerLeading = event =>{
+
+        let copy = Object.assign([], participants);
+        copy[event.target.alt].leading = event.target.value;
+        setParticipants(copy);
+    }
+
+    function addParticipant(){
+
+        let copy = Object.assign([], participants);
+        copy.push(
+            {
+                name:"",
+                uninformed:"",
+                resisting:"",
+                neutral:"",
+                supporting: "",
+                leading: ""
+            }
+        );
+
+        setParticipants(copy);
+    }
 
 
     return(
@@ -70,12 +131,12 @@ export function Participants() {
                     </tr>
                     {participants.map((element, index) => 
                     <tr key={index}>
-                        <td>{element.name}</td>
-                        <td>{element.uninformed}</td>
-                        <td>{element.resisting}</td>
-                        <td>{element.neutral}</td>
-                        <td>{element.supporting}</td>
-                        <td>{element.leading}</td>
+                        <td><input alt={index} name="name" value={element.name} onChange={changeHandlerName}/></td>
+                        <td><input alt={index} name="uninformed" value={element.uninformed} onChange={changeHandlerUninformed}/></td>
+                        <td><input alt={index} name="resisting" value={element.resisting} onChange={changeHandlerResisting}/></td>
+                        <td><input alt={index} name="neutral" value={element.neutral} onChange={changeHandlerNeutral}/></td>
+                        <td><input alt={index} name="supporting" value={element.supporting} onChange={changeHandlerSupporting}/></td>
+                        <td><input alt={index} name="leading" value={element.leading} onChange={changeHandlerLeading}/></td>
                     </tr>)}
                     <tr>
                         <td>Виталий</td>
@@ -114,7 +175,8 @@ export function Participants() {
                     Т - текущий статус заинтересованной стороны <br/>
                     Ж - желаемый статус заинтересованной стороны <br/><br/>
                 </div>
-                <button>Добавить</button>
+                <button onClick={() => addParticipant()}>Добавить</button>
+                <button onClick={() => saveParticipants()}>Сохранить</button>
             </div>
             
         </div>

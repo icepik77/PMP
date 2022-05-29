@@ -47,7 +47,6 @@ export function Regulation(){
     }, [])
 
     function saveRegulation(){
-        console.log(blank);
         const data = request(`/regulation/${project}`, "POST", {blank:blank});
     }
     
@@ -65,7 +64,6 @@ export function Regulation(){
     }
 
     const changeTableRole = event =>{
-        
         let copy = blank.table;
         copy[event.target.alt].role = event.target.value;
 

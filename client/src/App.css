@@ -254,6 +254,9 @@ body{
   margin-left: 20px;
 }
 
+.ISW{
+  position: relative;
+}
 .ISW__left-column{
   width: 50%;
 }
@@ -326,6 +329,39 @@ body{
   cursor: pointer;
 }
 
+.note{
+  position: absolute;
+  width: 25%;
+  left: 37%;
+  background-color: #005b7c;
+  height: 400px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.note div{
+  width: 100%;
+}
+.note h2{
+  color: white;
+  display: inline-block;
+  margin-left: 38%;
+}
+.note img{
+  width: 20px;
+  margin-top: 9px;
+  cursor: pointer;
+  margin-left: 34%;
+}
+.note textarea{
+  display: block;
+  width: 90%;
+  height: 321px;
+  font-size: 17px;
+  margin-top: -2px;
+}
+
 .cost__tasks{
   display: flex;
   flex-direction: column;
@@ -339,4 +375,12 @@ body{
 
 .participants__content{
   margin-left: 2%;
+}
+
+.participants button{
+  margin-left: 20px;
+}
+
+.participants input{
+  width: 96%;
 }

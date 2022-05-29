@@ -200,9 +200,10 @@ app.get("/participants/:id", function(request, response){
 
     const id = request.params.id;
 
-    participant.find({project: id}, function (err, men){
-        if (men){
-           return response.json(men);
+    participant.findOne({project: id}, function (err, result){
+        if (result){
+            console.log(result.participants[0]);
+            return response.json(result.participants);
         }
 
         response.json(null);
@@ -213,7 +214,7 @@ app.post("/participants/:id", function(request, response){
 
     if (!request.body) response.status(400).json({message: "Нет тела запроса"});
 
-    let participant = request.body.participant;
+    let participants = request.body.participants;
     let idProject = request.params.id;
 
     participant.findOne({project:idProject}, function(err, result){
@@ -222,12 +223,7 @@ app.post("/participants/:id", function(request, response){
         }
         else{   
             let participantDB = new participant({
-                name: participant.name,
-                uninformed: participant.uninformed,
-                resisting: participant.resisting,
-                neutral: participant.neutral,
-                supporting: participant.supporting,
-                leading: participant.leading,
+                participants: participants,
                 project: idProject
             });
         
@@ -236,13 +232,9 @@ app.post("/participants/:id", function(request, response){
         
     });
 
-    participantDB.updateOne({project:idProject}, {
-        name: participant.name,
-        uninformed: participant.uninformed,
-        resisting: participant.resisting,
-        neutral: participant.neutral,
-        supporting: participant.supporting,
-        leading: participant.leading,
-        project: idProject
-    }, function(err, result){});
+    participant.updateOne({project:idProject}, {
+        participants: participants
+    }, function(err, result){
+        console.log(result);
+    });
 });

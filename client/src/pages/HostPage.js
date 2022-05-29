@@ -21,7 +21,7 @@ export const HostPage = () =>{
                         <Link to={`/regulation/${localStorage.getItem("project")}`}>Устав проекта </Link>  
                     </li>
                     <li>
-                        <Link to={"/isw"}>ИСР</Link> 
+                        <Link to={`/isw/${localStorage.getItem("project")}`}>ИСР</Link> 
                     </li>
                     <li>
                         <Link to={"/cost"}>Оценка стоимости</Link>
