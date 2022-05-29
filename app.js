@@ -238,3 +238,32 @@ app.post("/participants/:id", function(request, response){
         console.log(result);
     });
 });
+
+app.post("/isw/:id", function(request, response){
+
+    if (!request.body) response.status(400).json({message: "Нет тела запроса"});
+
+    let {ISW, arrayCriticalPath} = request.body.participants;
+    let idProject = request.params.id;
+
+    participant.findOne({project:idProject}, function(err, result){
+        if (result){
+            
+        }
+        else{   
+            let participantDB = new participant({
+                participants: participants,
+                project: idProject
+            });
+        
+            participantDB.save();
+        }
+        
+    });
+
+    participant.updateOne({project:idProject}, {
+        participants: participants
+    }, function(err, result){
+        console.log(result);
+    });
+});
