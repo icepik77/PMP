@@ -24,11 +24,28 @@ export function ISW() {
         noteCommon:"",
         PackagesWork: []
     });
-    let noteForm = {
+
+    let [noteForm, setForm] = useState({
         index: null,
         text: ''
-    };
+    });
     let [arrayCriticalPath, setArrayCriticalPath] = useState([]);
+
+    /*async function getData(){
+        
+        const data = await request(`/isw/${project}`, "GET");
+        console.log(data);
+        if (data.isw!= null || data.list!= null){
+            console.log("here");
+            setISW(data.isw);
+            setArrayCriticalPath(data.list);
+            console.log(ISW);
+        }
+    }
+
+    useEffect (() => {
+        getData();
+    }, [])*/
 
     function setPackageWork(event) {
         let copy = Object.assign([], ISW.PackagesWork);
@@ -37,7 +54,6 @@ export function ISW() {
     }
 
     function setWork(event) {
-        console.log(event.target.name);
         let copy = Object.assign([], ISW.PackagesWork);
         copy[event.target.name].works[event.target.id].name=event.target.value;
         setISW({...ISW, PackagesWork: copy});
@@ -65,6 +81,7 @@ export function ISW() {
         let copy = Object.assign([], ISW.PackagesWork);
         copy.push({
             name:"",
+            note:"",
             laborIntensity:0,
             works:[]
         });
@@ -118,24 +135,35 @@ export function ISW() {
         setISW({laborCommon:sum, noteCommon:ISW.noteCommon, PackagesWork:ISW.PackagesWork});
     }
 
-    function saveWork(){
+    function saveISW(){
     
         const data = request(`/isw/${project}`, "POST", {ISW, arrayCriticalPath});
     }
 
-    function showPackageWorks(){
-        //let note = await prompt("Введите информацию о ", `Новый проект ${indexNewTitle}`);
+    function showNotePackageWorks(index){
+
+        let note = document.querySelector(".note");
+        note.style.display = "flex";
+
+        setForm({
+            index: index,
+            text: ISW.PackagesWork[index].note 
+        });
     }
 
     function closeNoteForm(){
-        let cross = document.querySelector(".note img");
-        cross.onClick = function(){
 
-        }
+        let copy = Object.assign([], ISW.PackagesWork);
+        copy[noteForm.index].note = noteForm.text;
+        setISW({...ISW, PackagesWork:copy});     
+
+        let note = document.querySelector(".note");
+        note.style.display = "none";
     }
 
-    function setNote(){
-
+    const setNote = event =>{
+        
+        setForm({...noteForm, text: event.target.value})
     }
 
     return(
@@ -162,12 +190,15 @@ export function ISW() {
                     <h2>Заметки</h2>
                     <img src={crossForm} onClick={() => closeNoteForm()}/>
                 </div>
-                <textarea value={''}></textarea>
+                <textarea id={noteForm.index} value={noteForm.text} onChange={setNote}></textarea>
             </div>
             <div className="str">
                 <div className="ISW__left-column">
-                    <button onClick={() => addPackageWork()}>Добавить пакет работ</button>
-                    <button onClick={() => getAllTimeISW()}>Рассчитать трудоемкость</button>
+                    <div className="str">
+                        <button onClick={() => addPackageWork()}>Добавить пакет работ</button>
+                        <button onClick={() => getAllTimeISW()}>Рассчитать трудоемкость</button>
+                        <button onClick={() => saveISW()}>Сохранить ИСР</button>
+                    </div>
                     <h3>Трудоемкость проекта: {ISW.laborCommon}</h3>
                     <ul className="WBS-list">
                         {ISW.PackagesWork.map((element, index) =>
@@ -177,7 +208,7 @@ export function ISW() {
                                         className="input-string" placeholder="Введите название структуры..."
                                     /> 
                                     <img src={plus} onClick={() => addWork(index)} className="btn-img"/> 
-                                    <img src={note} className="btn-img"/>
+                                    <img src={note} className="btn-img" onClick={() => showNotePackageWorks(index)}/>
                                     <img src={clock} className="btn-img" onClick={() => getTimePackageWork(index)}/>
                                     <img src={cross} className="btn-img" onClick={() => deleteStructWork(index)}/>
                                     <input value={element.laborIntensity} name={index} className="labor-input"/>

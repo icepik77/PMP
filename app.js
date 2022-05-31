@@ -8,10 +8,13 @@ const newUser = require("./model/modelUser");
 const project = require("./model/project");
 const regulation = require("./model/regulation");
 const participant = require("./model/participant");
+const isw = require("./model/structWorks");
+const criticalList = require("./model/criticalTask");
 
 const jwt = require('jsonwebtoken');
 const { json } = require("express/lib/response");
 const { findByIdAndUpdate } = require("./model/modelUser");
+const structWorks = require("./model/structWorks");
 
 async function startMongoose(){
     try {
@@ -239,31 +242,77 @@ app.post("/participants/:id", function(request, response){
     });
 });
 
+app.get("/isw/:id", function(request, response){
+
+    const id = request.params.id;
+
+    isw.findOne({project: id}, function (err, isw){
+        if (isw){
+
+            criticalList.findOne({project: id}, function (err, list){
+                if (list){
+                
+                    return response.json({isw, list});
+                }
+        
+                
+            });
+            
+            return response.json({isw});
+        }
+
+        response.json(null);
+    });  
+});
+
 app.post("/isw/:id", function(request, response){
 
     if (!request.body) response.status(400).json({message: "Нет тела запроса"});
 
-    let {ISW, arrayCriticalPath} = request.body.participants;
+    let {ISW, arrayCriticalPath} = request.body;
     let idProject = request.params.id;
 
-    participant.findOne({project:idProject}, function(err, result){
-        if (result){
-            
-        }
+    if (arrayCriticalPath == null){
+        arrayCriticalPath = []
+    }
+
+    isw.findOne({project:idProject}, function(err, result){
+        if (result){}
         else{   
-            let participantDB = new participant({
-                participants: participants,
+            let iswDB = new structWorks({
+                laborCommon: ISW.laborCommon,
+                noteCommon: ISW.noteCommon,
+                packagesWorks: ISW.PackagesWork,
                 project: idProject
             });
         
-            participantDB.save();
+            iswDB.save();
         }
-        
     });
 
-    participant.updateOne({project:idProject}, {
-        participants: participants
-    }, function(err, result){
-        console.log(result);
+    criticalList.findOne({project:idProject}, function(err, result){
+        if (result){}
+        else{   
+            let list = new criticalTask({
+                list: arrayCriticalPath,
+                project: idProject
+            });
+        
+            return list.save();
+        }
     });
+
+    isw.updateOne({project:idProject}, {
+        laborCommon: ISW.laborCommon,
+        noteCommon: ISW.noteCommon,
+        packagesWorks: ISW.PackagesWork,
+        project: idProject
+    }, function(err, result){});
+
+    criticalList.updateOne({project:idProject}, {
+        laborCommon: ISW.laborCommon,
+        noteCommon: ISW.noteCommon,
+        packagesWorks: ISW.PackagesWork,
+        project: idProject
+    }, function(err, result){});
 });
