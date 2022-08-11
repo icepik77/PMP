@@ -245,23 +245,21 @@ app.post("/participants/:id", function(request, response){
 app.get("/isw/:id", function(request, response){
 
     const id = request.params.id;
-
     isw.findOne({project: id}, function (err, isw){
         if (isw){
 
             criticalList.findOne({project: id}, function (err, list){
+
                 if (list){
-                
                     return response.json({isw, list});
                 }
-        
-                
+                else return response.json({isw});
             });
             
-            return response.json({isw});
+            
         }
-
-        response.json(null);
+        
+        else return response.json(null);
     });  
 });
 
@@ -277,12 +275,14 @@ app.post("/isw/:id", function(request, response){
     }
 
     isw.findOne({project:idProject}, function(err, result){
-        if (result){}
+        if (result){
+            return;
+        }
         else{   
             let iswDB = new structWorks({
                 laborCommon: ISW.laborCommon,
                 noteCommon: ISW.noteCommon,
-                packagesWorks: ISW.PackagesWork,
+                packagesWorks: ISW.packagesWorks,
                 project: idProject
             });
         
@@ -291,28 +291,28 @@ app.post("/isw/:id", function(request, response){
     });
 
     criticalList.findOne({project:idProject}, function(err, result){
-        if (result){}
+        if (result){
+            return;
+        }
         else{   
-            let list = new criticalTask({
-                list: arrayCriticalPath,
+            let list = new criticalList({
+                list: arrayCriticalPath.list,
                 project: idProject
             });
         
             return list.save();
         }
     });
-
+    
     isw.updateOne({project:idProject}, {
         laborCommon: ISW.laborCommon,
         noteCommon: ISW.noteCommon,
-        packagesWorks: ISW.PackagesWork,
+        packagesWorks: ISW.packagesWorks,
         project: idProject
     }, function(err, result){});
-
+    
     criticalList.updateOne({project:idProject}, {
-        laborCommon: ISW.laborCommon,
-        noteCommon: ISW.noteCommon,
-        packagesWorks: ISW.PackagesWork,
+        list: arrayCriticalPath.list,
         project: idProject
     }, function(err, result){});
 });

@@ -10,6 +10,7 @@ import cross from "./img/cross.png";
 import important from "./img/important.png";
 import avatar from "./img/avatar.JPG";
 import crossForm from "./img/crossForm.png";
+import { setMaxListeners } from "process";
 
 
 
@@ -19,10 +20,25 @@ export function ISW() {
     const navigate = useNavigate();
     const project = localStorage.getItem("project");
 
+    async function getData(){
+        
+        const data = await request(`/isw/${project}`, "GET");
+
+        if (data.isw!= null || data.list!= null){
+            
+            setISW({...ISW, packagesWorks: data.isw.packagesWorks});
+            data.list ? setArrayCriticalPath(data.list) : setArrayCriticalPath([]);
+        }
+    }
+
+    useEffect (() => {
+        getData();
+    }, [])
+
     let [ISW, setISW] = useState({
         laborCommon:0,
         noteCommon:"",
-        PackagesWork: []
+        packagesWorkss: []
     });
 
     let [noteForm, setForm] = useState({
@@ -31,92 +47,78 @@ export function ISW() {
     });
     let [arrayCriticalPath, setArrayCriticalPath] = useState([]);
 
-    /*async function getData(){
-        
-        const data = await request(`/isw/${project}`, "GET");
-        console.log(data);
-        if (data.isw!= null || data.list!= null){
-            console.log("here");
-            setISW(data.isw);
-            setArrayCriticalPath(data.list);
-            console.log(ISW);
-        }
-    }
-
-    useEffect (() => {
-        getData();
-    }, [])*/
+    
 
     function setPackageWork(event) {
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         copy[Number(event.target.name)].name = event.target.value;
-        setISW({...ISW, PackagesWork: copy});
+        setISW({...ISW, packagesWorks: copy});
     }
 
     function setWork(event) {
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         copy[event.target.name].works[event.target.id].name=event.target.value;
-        setISW({...ISW, PackagesWork: copy});
+        setISW({...ISW, packagesWorks: copy});
     }
 
     function setTime(event){
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         copy[event.target.name].works[event.target.id].labor = Number(event.target.value);
-        setISW({...ISW, PackagesWork: copy});
+        setISW({...ISW, packagesWorks: copy});
     }
 
     function getTimePackageWork(index){
        let sum=0;
-       ISW.PackagesWork[index].works.forEach(function(item,i) {
+       ISW.packagesWorks[index].works.forEach(function(item,i) {
+
             sum=sum+item.labor;
-            console.log(item);
         });
-       let copy = Object.assign([], ISW.PackagesWork);
+
+       let copy = Object.assign([], ISW.packagesWorks);
        copy[index].laborIntensity=sum;
-       setISW({...ISW, PackagesWork: copy});
-       console.log(sum);
+       setISW({...ISW, packagesWorks: copy});
     }
    
     function addPackageWork() {
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         copy.push({
             name:"",
             note:"",
             laborIntensity:0,
             works:[]
         });
-        setISW({...ISW, PackagesWork:copy});
+        setISW({...ISW, packagesWorks:copy});
     }
 
     function addWork(index) {
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         copy[index].works.push({
             name: "",
             labor: 0,
         });
-        setISW({...ISW, PackagesWork: copy});
+        setISW({...ISW, packagesWorks: copy});
     }
 
     function addCriticalTask(index, indexWork){
-        let copy = Object.assign([], arrayCriticalPath);
+        let copy = Object.assign([], arrayCriticalPath.list);
         let element = {
-            name: ISW.PackagesWork[index].works[indexWork].name,
-            labor: ISW.PackagesWork[index].works[indexWork].labor
+            name: ISW.packagesWorks[index].works[indexWork].name,
+            labor: ISW.packagesWorks[index].works[indexWork].labor
         }
         copy.push(element);
-        setArrayCriticalPath(copy);
+        setArrayCriticalPath({...arrayCriticalPath, list: copy});
     }
 
     function deleteStructWork(index){
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         delete copy[index];
-        setISW({...ISW, PackagesWork:copy});
+        setISW({...ISW, packagesWorks:copy});
     }
 
     function deleteWork(index, indexWork){
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         delete copy[index].works[indexWork];
-        setISW({...ISW, PackagesWork:copy});
+        setISW({...ISW, packagesWorks:copy});
     }
 
     function deleteCriticalTask(index){
@@ -127,16 +129,16 @@ export function ISW() {
 
     function getAllTimeISW(){
         let sum=0;
-        ISW.PackagesWork.forEach(function(item){
+        ISW.packagesWorks.forEach(function(item){
             item.works.forEach(function(work){
                 sum = sum + work.labor;
             });
         });
-        setISW({laborCommon:sum, noteCommon:ISW.noteCommon, PackagesWork:ISW.PackagesWork});
+        setISW({laborCommon:sum, noteCommon:ISW.noteCommon, packagesWorks:ISW.packagesWorks});
     }
 
     function saveISW(){
-    
+        
         const data = request(`/isw/${project}`, "POST", {ISW, arrayCriticalPath});
     }
 
@@ -147,15 +149,15 @@ export function ISW() {
 
         setForm({
             index: index,
-            text: ISW.PackagesWork[index].note 
+            text: ISW.packagesWorks[index].note 
         });
     }
 
     function closeNoteForm(){
 
-        let copy = Object.assign([], ISW.PackagesWork);
+        let copy = Object.assign([], ISW.packagesWorks);
         copy[noteForm.index].note = noteForm.text;
-        setISW({...ISW, PackagesWork:copy});     
+        setISW({...ISW, packagesWorks:copy});     
 
         let note = document.querySelector(".note");
         note.style.display = "none";
@@ -201,7 +203,7 @@ export function ISW() {
                     </div>
                     <h3>Трудоемкость проекта: {ISW.laborCommon}</h3>
                     <ul className="WBS-list">
-                        {ISW.PackagesWork.map((element, index) =>
+                        {ISW.packagesWorks ? ISW.packagesWorks.map((element, index) =>
                             <li key={index}>
                                 <div className="struct-work">
                                     <input value={element.name} name={index} onChange={(event) => setPackageWork(event)} 
@@ -214,7 +216,7 @@ export function ISW() {
                                     <input value={element.laborIntensity} name={index} className="labor-input"/>
                                 </div>
                                 <ul>
-                                    {ISW.PackagesWork[index].works.map((elementWork, indexWork) => 
+                                    {ISW.packagesWorks[index].works.map((elementWork, indexWork) => 
                                         <li key={indexWork}>
                                             <div className="struct-work">
                                                 <input value={elementWork.name} name={index} id={indexWork}  key={indexWork}
@@ -229,21 +231,21 @@ export function ISW() {
                                         </li>
                                     )}
                                 </ul>
-                            </li>)
+                            </li>) : ""
                         }
                     </ul>
                 </div>
                 <div className="ISW__right-column">
                     <h2>Задачи КП</h2>
                     <ul>
-                        {arrayCriticalPath.map((element, index) => 
+                        {arrayCriticalPath.list ? arrayCriticalPath.list.map((element, index) => 
                             <li key={index}>
                                 <div className="struct-work" onClick={() => deleteCriticalTask(index)}>
                                     <input className="input-string" value={element.name} disabled/>
                                     <input className="sumLabor" value={element.labor} disabled/>
                                 </div>
                             </li>
-                        )}
+                        ) : ""}
                     </ul>
                 </div>
             </div>
